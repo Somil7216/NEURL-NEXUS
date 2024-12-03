@@ -1,0 +1,36 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Simulated Data: Global life expectancy and associated income/healthcare data
+data = {
+    'Country': ['USA', 'India', 'China', 'Brazil', 'Germany', 'UK', 'Australia', 'Canada', 'South Korea', 'South Africa'],
+    'Life Expectancy (Years)': [79, 69, 77, 75, 81, 81, 82, 82, 81, 64],
+    'Income per Capita (USD)': [65000, 2000, 8000, 12000, 46000, 43000, 55000, 50000, 35000, 5000],
+    'Healthcare Expenditure (% GDP)': [17, 3, 5, 9, 11, 10, 9, 10, 8, 8]
+}
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Categorize countries into income brackets
+income_labels = ['Low Income', 'Lower Middle Income', 'Upper Middle Income', 'High Income']
+income_bins = [0, 3000, 10000, 30000, np.inf]
+
+df['Income Group'] = pd.cut(df['Income per Capita (USD)'], bins=income_bins, labels=income_labels)
+
+# Pie chart showing the distribution of countries by income group
+income_distribution = df['Income Group'].value_counts()
+
+# Plotting the pie chart
+plt.figure(figsize=(7, 7))
+plt.pie(income_distribution, labels=income_distribution.index, autopct='%1.1f%%', startangle=90, colors=['#FF9999','#66B3FF','#99FF99','#FFCC99'])
+plt.title('Global Income Group Distribution')
+plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.show()
+
+# Correlation between Life Expectancy, Income, and Healthcare Expenditure
+correlation_matrix = df[['Life Expectancy (Years)', 'Income per Capita (USD)', 'Healthcare Expenditure (% GDP)']].corr()
+print("\nCorrelation Matrix:")
+print(correlation_matrix)
